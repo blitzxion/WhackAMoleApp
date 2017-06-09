@@ -27,7 +27,7 @@ namespace WhackAMoleApp
         int _totalMolesHit { get; set; } = 0;
         int _totalMolesMissed { get; set; } = 0;
 
-        List<WaveSound> Sounds { get; set; }
+        List<WaveSound> Sounds { get; set; } = new List<WaveSound>();
 
 
         double TotalPoints
@@ -103,9 +103,7 @@ namespace WhackAMoleApp
 
                 if (remainingTime < TimeSpan.Zero)
                 {
-                    // TODO: Place this in a method of its own, do something with scores, etc.
-                    _gameTimer.Stop();
-                    MessageBox.Show("Game Over!");
+                    GameOver();
                     return;
                 }
 
@@ -133,33 +131,30 @@ namespace WhackAMoleApp
 
         void LoadSounds()
         {
-            var sounds = new List<UnmanagedMemoryStream>() {
-                Properties.Resources.Yipe,
-                Properties.Resources.Yipe2,
-                Properties.Resources.Yipe3,
-                Properties.Resources.Ugh,
-                Properties.Resources.Ugh2
-            };
-
-            Sounds = new List<WaveSound>();
-
-            sounds.ForEach(x => {
-                Sounds.Add(new WaveSound(x));
-            });
-
+            Sounds.Add(new WaveSound(Properties.Resources.Yipe));
+            Sounds.Add(new WaveSound(Properties.Resources.Yipe2));
+            Sounds.Add(new WaveSound(Properties.Resources.Yipe3));
+            Sounds.Add(new WaveSound(Properties.Resources.Ugh));
+            Sounds.Add(new WaveSound(Properties.Resources.Ugh2));
         }
 
         void HitSound()
         {
+            Sounds[_gameRNG.Next(Sounds.Count)].Play();
+        }
 
-            var rndIndex = _gameRNG.Next(Sounds.Count);
+        void GameOver()
+        {
+            _gameTimer.Stop();
+            var scoreAsk = MessageBox.Show("Game over! Would you like to submit your score?", "Game Over!", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button1);
+            if(scoreAsk == DialogResult.Yes)
+            {
+                var hsForm = new HighScores();
 
-            Sounds[rndIndex].Play();
+                hsForm.ShowDialog();
+            }
 
-            //System.Media.SoundPlayer sp = new System.Media.SoundPlayer(sounds[rndIndex]);
-            //sp.Play();
-            
-
+            Close();
         }
 
     }

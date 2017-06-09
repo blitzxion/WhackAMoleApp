@@ -54,7 +54,7 @@
     <Compile Include="AppSettings.cs" />
     <Compile Include="Classes\Difficulty.cs" />
     <Compile Include="Classes\MoleControl.cs" />
-    <Compile Include="Classes\SoundPlayer.cs" />
+    <Compile Include="Classes\WaveSound.cs" />
     <Compile Include="Enums\GameDifficultyTypes.cs" />
     <Compile Include="Enums\MoleStates.cs" />
     <Compile Include="Game.cs">
