@@ -12,11 +12,8 @@ namespace WhackAMoleApp
     public class AppSettings : BaseAppSettings<AppSettings>
     {
         public GameDifficultyTypes Difficulty { get; set; } = GameDifficultyTypes.NORMAL;
-
         public string PlayerName { get; set; } = "Mole Whacker";
-
     }
-
 
     public abstract class BaseAppSettings<T> where T : new()
     {
