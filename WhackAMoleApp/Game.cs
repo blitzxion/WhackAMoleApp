@@ -149,8 +149,21 @@ namespace WhackAMoleApp
             var scoreAsk = MessageBox.Show("Game over! Would you like to submit your score?", "Game Over!", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button1);
             if(scoreAsk == DialogResult.Yes)
             {
-                var hsForm = new HighScores();
+                using (var context = new HighScoreContext())
+                {
+                    context.HighScores.Add(new HighScore() {
+                        Entered = DateTime.UtcNow,
+                        Name = _settings.PlayerName,
+                        Difficulty = _settings.Difficulty.ToString(),
+                        Score = TotalPoints,
+                        TotalMoles = _totalMolesSeen,
+                        TotalHit = _totalMolesHit,
+                        TotalMissed = _totalMolesMissed
+                    });
+                    context.SaveChanges();
+                }
 
+                var hsForm = new HighScores();
                 hsForm.ShowDialog();
             }
 

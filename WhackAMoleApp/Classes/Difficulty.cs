@@ -43,7 +43,7 @@ namespace WhackAMoleApp
         public Difficulty()
         {
             GameDifficulty = GameDifficultyTypes.NORMAL;
-            GameDuration = TimeSpan.FromMinutes(2);
+            GameDuration = TimeSpan.FromMinutes(1);
             GameTickInterval = TimeSpan.FromSeconds(1); // Normally, every 1 second.
             ShowChance = 10d.PercOf(100);
             ShowDuration = TimeSpan.FromSeconds(5);
@@ -70,16 +70,16 @@ namespace WhackAMoleApp
                     diff.ShowDuration = TimeSpan.FromSeconds(7);
                     break;
                 case GameDifficultyTypes.HARD:
-                    diff.ShowDuration = TimeSpan.FromSeconds(1);
-                    diff.GameTickInterval = TimeSpan.FromMilliseconds(700);
+                    diff.ShowDuration = TimeSpan.FromMilliseconds(800);
+                    diff.GameTickInterval = TimeSpan.FromMilliseconds(800);
                     break;
                 case GameDifficultyTypes.INSANE:
-                    diff.ShowDuration = TimeSpan.FromMilliseconds(500);
-                    diff.GameTickInterval = TimeSpan.FromMilliseconds(600);
+                    diff.ShowDuration = TimeSpan.FromMilliseconds(700);
+                    diff.GameTickInterval = TimeSpan.FromMilliseconds(700);
                     break;
                 case GameDifficultyTypes.NIGHTMARE:
-                    diff.ShowDuration = TimeSpan.FromMilliseconds(400);
-                    diff.GameTickInterval = TimeSpan.FromMilliseconds(500);
+                    diff.ShowDuration = TimeSpan.FromMilliseconds(600);
+                    diff.GameTickInterval = TimeSpan.FromMilliseconds(600);
                     break;
                 case GameDifficultyTypes.HELL:
 

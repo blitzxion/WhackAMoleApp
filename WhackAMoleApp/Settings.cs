@@ -46,7 +46,13 @@ namespace WhackAMoleApp
 
         void ClearHighScores()
         {
-
+            // This is by far the worst way of doing this.
+            using (var context = new HighScoreContext())
+            {
+                var entities = context.HighScores;
+                context.HighScores.RemoveRange(entities);
+                context.SaveChanges(); 
+            }
         }
 
         void LoadFromSettings()
