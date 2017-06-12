@@ -27,8 +27,10 @@ namespace WhackAMoleApp
         int _totalMolesHit { get; set; } = 0;
         int _totalMolesMissed { get; set; } = 0;
 
-        List<WaveSound> Sounds { get; set; } = new List<WaveSound>();
+        //List<WaveSound> _sounds { get; set; } = new List<WaveSound>();
+        IEnumerable<Stream> _sounds { get; set; } = new List<Stream>();
 
+        Mp3Sound _gameMusic { get; set; }
 
         double TotalPoints
         {
@@ -78,6 +80,16 @@ namespace WhackAMoleApp
 
                 _molesControls.Add(mole);
             });
+
+            _gameMusic = new Mp3Sound(new MemoryStream(Properties.Resources.gameplay))
+            {
+                EnableLoop = true,
+                Volume = _settings.Volume / 100
+            };
+
+            Activated += (o, e) => _gameMusic.Play();
+            FormClosing += (o, e) => _gameMusic.Stop();
+
         }
 
         void Reset()
@@ -131,27 +143,54 @@ namespace WhackAMoleApp
 
         void LoadSounds()
         {
-            Sounds.Add(new WaveSound(Properties.Resources.Yipe));
-            Sounds.Add(new WaveSound(Properties.Resources.Yipe2));
-            Sounds.Add(new WaveSound(Properties.Resources.Yipe3));
-            Sounds.Add(new WaveSound(Properties.Resources.Ugh));
-            Sounds.Add(new WaveSound(Properties.Resources.Ugh2));
+            //Func<Stream, WaveSound> setupSound = str => {
+            //    return new WaveSound(str) { Volume = _settings.Volume / 100 };
+            //};
+
+            //_sounds.Add(setupSound(Properties.Resources.Yipe));
+            //_sounds.Add(setupSound(Properties.Resources.Yipe2));
+            //_sounds.Add(setupSound(Properties.Resources.Yipe3));
+            //_sounds.Add(setupSound(Properties.Resources.Ugh));
+            //_sounds.Add(setupSound(Properties.Resources.Ugh2));
+
+            _sounds = new List<Stream>() {
+                Properties.Resources.Yipe,
+                Properties.Resources.Yipe2,
+                Properties.Resources.Yipe3,
+                Properties.Resources.Ugh,
+                Properties.Resources.Ugh2
+            };
         }
 
         void HitSound()
         {
-            Sounds[_gameRNG.Next(Sounds.Count)].Play();
+            // _sounds[_gameRNG.Next(_sounds.Count)].Play();
+
+            var newSound = new MemoryStream();
+            var selectedSound = _sounds.ElementAt(_gameRNG.Next(_sounds.Count()));
+
+            // Copy the sound to the selected sound
+            selectedSound.CopyTo(newSound);
+
+            // Must reset this, otherwise, crap happens.
+            newSound.Position = 0;
+            selectedSound.Position = 0;
+
+            var wave = new WaveSound(newSound) { Volume = _settings.Volume / 100 };
+            wave.OnPlaybackStopped += () => { wave.Dispose(); };
+            wave.Play();
         }
 
         void GameOver()
         {
             _gameTimer.Stop();
             var scoreAsk = MessageBox.Show("Game over! Would you like to submit your score?", "Game Over!", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button1);
-            if(scoreAsk == DialogResult.Yes)
+            if (scoreAsk == DialogResult.Yes)
             {
                 using (var context = new HighScoreContext())
                 {
-                    context.HighScores.Add(new HighScore() {
+                    context.HighScores.Add(new HighScore()
+                    {
                         Entered = DateTime.UtcNow,
                         Name = _settings.PlayerName,
                         Difficulty = _settings.Difficulty.ToString(),

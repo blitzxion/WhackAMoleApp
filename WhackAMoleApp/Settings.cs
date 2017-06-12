@@ -12,6 +12,10 @@ namespace WhackAMoleApp
 {
     public partial class Settings : Form
     {
+        public event Action<Control> OnSettingsChanged;
+        public event Action<AppSettings> OnSettingsSaved;
+
+
         public Settings()
         {
             InitializeComponent();
@@ -42,6 +46,9 @@ namespace WhackAMoleApp
                 Close();
             };
 
+            cmbDifficulty.SelectedValueChanged += (o, e) => { OnSettingsChanged?.Invoke(cmbDifficulty); };
+            txtPlayerName.TextChanged += (o, e) => OnSettingsChanged?.Invoke(txtPlayerName);
+            tbVolume.ValueChanged += (o, e) => OnSettingsChanged?.Invoke(tbVolume);
         }
 
         void ClearHighScores()
@@ -60,6 +67,7 @@ namespace WhackAMoleApp
             var settings = AppSettings.Load();
             cmbDifficulty.SelectedItem = settings.Difficulty.ToString();
             txtPlayerName.Text = settings.PlayerName;
+            tbVolume.Value = (int)settings.Volume;
         }
 
         void SaveSettings()
@@ -67,7 +75,10 @@ namespace WhackAMoleApp
             var settings = AppSettings.Load();
             settings.Difficulty = cmbDifficulty.SelectedItem.ToEnumOrDefault(GameDifficultyTypes.NORMAL);
             settings.PlayerName = txtPlayerName.Text;
+            settings.Volume = tbVolume.Value;
             settings.Save();
+
+            OnSettingsSaved?.Invoke(settings);
         }
 
     }

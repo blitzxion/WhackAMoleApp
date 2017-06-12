@@ -81,6 +81,16 @@ namespace WhackAMoleApp.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] gameplay {
+            get {
+                object obj = ResourceManager.GetObject("gameplay", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap grass {
@@ -127,6 +137,16 @@ namespace WhackAMoleApp.Properties {
             get {
                 object obj = ResourceManager.GetObject("holeWithMoleHit", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] menu {
+            get {
+                object obj = ResourceManager.GetObject("menu", resourceCulture);
+                return ((byte[])(obj));
             }
         }
         

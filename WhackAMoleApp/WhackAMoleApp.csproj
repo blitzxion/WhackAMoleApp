@@ -76,8 +76,9 @@
   <ItemGroup>
     <Compile Include="Classes\AppSettings.cs" />
     <Compile Include="Classes\Difficulty.cs" />
+    <Compile Include="Classes\LoopStream.cs" />
     <Compile Include="Classes\MoleControl.cs" />
-    <Compile Include="Classes\WaveSound.cs" />
+    <Compile Include="Classes\SoundPlayer.cs" />
     <Compile Include="Enums\GameDifficultyTypes.cs" />
     <Compile Include="Enums\MoleStates.cs" />
     <Compile Include="Game.cs">
@@ -184,7 +185,10 @@
     <None Include="Resources\Yipe3.wav" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="App_Data\" />
+    <None Include="Resources\gameplay.mp3" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\menu.mp3" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\System.Data.SQLite.Core.1.0.105.1\build\net451\System.Data.SQLite.Core.targets" Condition="Exists('..\packages\System.Data.SQLite.Core.1.0.105.1\build\net451\System.Data.SQLite.Core.targets')" />
