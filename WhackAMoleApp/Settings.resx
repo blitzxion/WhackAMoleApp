@@ -117,4 +117,29 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="textBox1.Text" xml:space="preserve">
+    <value>Whack a Mole, 2017
+---------------------
+Richard Shaw, Creator
+
+Game Sound\Noises
+-----------------------
+Performed by Richard Shaw
+
+Game Music
+-------------------
+"Cartoon Menu Music"
+Author: fearing
+Site: http//fearing.newgrounds.com/
+
+"Frantic Gameplay"
+Author: Unknown
+Site: http://soundimage.org
+
+Art
+----------
+Author: Unknown
+(But thank you anyways!)
+</value>
+  </data>
 </root>
