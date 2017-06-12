@@ -56,7 +56,7 @@ namespace WhackAMoleApp
                     if(control.GetType() == typeof(TrackBar))
                     {
                         TrackBar volCtr = control as TrackBar;
-                        _menuMusic.Volume = volCtr.Value / 100f;
+                        _menuMusic.Volume = volCtr.Value / 100;
                     }
                 };
 
