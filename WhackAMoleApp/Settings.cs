@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,6 +16,9 @@ namespace WhackAMoleApp
         public event Action<Control> OnSettingsChanged;
         public event Action<AppSettings> OnSettingsSaved;
 
+        Random _rnd { get; set; } = new Random();
+
+        IEnumerable<Stream> _sounds { get; set; } = new List<Stream>();
 
         public Settings()
         {
@@ -22,11 +26,13 @@ namespace WhackAMoleApp
             CenterToParent();
 
             SetupControls();
-            LoadFromSettings();
+            LoadFromSettings(AppSettings.Load());
         }
 
         public void SetupControls()
         {
+            LoadSounds();
+
             cmbDifficulty.DataSource = new BindingSource(Enum.GetNames(typeof(GameDifficultyTypes)), null);
 
             btnClearScores.Click += (o, args) =>
@@ -47,10 +53,38 @@ namespace WhackAMoleApp
 
             txtPlayerName.TextChanged += (o, e) => OnSettingsChanged?.Invoke(txtPlayerName);
 
-            tbVolume.ValueChanged += (o, e) =>
+            tbBGMVolume.ValueChanged += (o, e) =>
             {
-                OnSettingsChanged?.Invoke(tbVolume);
-                MusicManager.Volume = tbVolume.Value / 100f;
+                OnSettingsChanged?.Invoke(tbBGMVolume);
+                MusicManager.BGMVolume = tbBGMVolume.Value / 100f;
+            };
+
+            tbSFXVolume.ValueChanged += (o, e) =>
+            {
+                OnSettingsChanged?.Invoke(tbSFXVolume);
+                MusicManager.SFXVolume = tbSFXVolume.Value / 100f;
+            };
+
+            tbSFXVolume.MouseUp += (o, e) => {
+                var rndSound = _sounds.ElementAt(_rnd.Next(_sounds.Count()));
+                MusicManager.GetSound(rndSound).Play();
+            };
+
+            lnkLoadDefaults.Click += (o, e) => LoadFromSettings(new AppSettings());
+
+            // Always make sure we apply the latest changes when leaving settings
+            FormClosing += (o, e) => LoadFromSettings(AppSettings.Load());
+
+        }
+
+        void LoadSounds()
+        {
+            _sounds = new List<Stream>() {
+                Properties.Resources.Yipe,
+                Properties.Resources.Yipe2,
+                Properties.Resources.Yipe3,
+                Properties.Resources.Ugh,
+                Properties.Resources.Ugh2
             };
         }
 
@@ -65,12 +99,12 @@ namespace WhackAMoleApp
             }
         }
 
-        void LoadFromSettings()
+        void LoadFromSettings(AppSettings settings)
         {
-            var settings = AppSettings.Load();
             cmbDifficulty.SelectedItem = settings.Difficulty.ToString();
             txtPlayerName.Text = settings.PlayerName;
-            tbVolume.Value = (int)settings.Volume;
+            tbBGMVolume.Value = (int)settings.BGMVolume;
+            tbSFXVolume.Value = (int)settings.SFXVolume;
         }
 
         void SaveSettings()
@@ -78,7 +112,8 @@ namespace WhackAMoleApp
             var settings = AppSettings.Load();
             settings.Difficulty = cmbDifficulty.SelectedItem.ToEnumOrDefault(GameDifficultyTypes.NORMAL);
             settings.PlayerName = txtPlayerName.Text;
-            settings.Volume = tbVolume.Value;
+            settings.BGMVolume = tbBGMVolume.Value;
+            settings.SFXVolume = tbSFXVolume.Value;
             settings.Save();
 
             OnSettingsSaved?.Invoke(settings);

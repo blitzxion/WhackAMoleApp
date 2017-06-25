@@ -32,20 +32,24 @@
             this.btnCancel = new System.Windows.Forms.Button();
             this.btnSave = new System.Windows.Forms.Button();
             this.tabGeneralSettings = new System.Windows.Forms.TabPage();
+            this.btnClearScores = new System.Windows.Forms.Button();
             this.label3 = new System.Windows.Forms.Label();
-            this.tbVolume = new System.Windows.Forms.TrackBar();
+            this.tbBGMVolume = new System.Windows.Forms.TrackBar();
             this.txtPlayerName = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.cmbDifficulty = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
             this.tabControl = new System.Windows.Forms.TabControl();
             this.tabAbout = new System.Windows.Forms.TabPage();
-            this.btnClearScores = new System.Windows.Forms.Button();
             this.textBox1 = new System.Windows.Forms.TextBox();
+            this.label4 = new System.Windows.Forms.Label();
+            this.tbSFXVolume = new System.Windows.Forms.TrackBar();
+            this.lnkLoadDefaults = new System.Windows.Forms.LinkLabel();
             this.tabGeneralSettings.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.tbVolume)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.tbBGMVolume)).BeginInit();
             this.tabControl.SuspendLayout();
             this.tabAbout.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.tbSFXVolume)).BeginInit();
             this.SuspendLayout();
             // 
             // btnCancel
@@ -73,9 +77,11 @@
             // 
             // tabGeneralSettings
             // 
+            this.tabGeneralSettings.Controls.Add(this.label4);
+            this.tabGeneralSettings.Controls.Add(this.tbSFXVolume);
             this.tabGeneralSettings.Controls.Add(this.btnClearScores);
             this.tabGeneralSettings.Controls.Add(this.label3);
-            this.tabGeneralSettings.Controls.Add(this.tbVolume);
+            this.tabGeneralSettings.Controls.Add(this.tbBGMVolume);
             this.tabGeneralSettings.Controls.Add(this.txtPlayerName);
             this.tabGeneralSettings.Controls.Add(this.label2);
             this.tabGeneralSettings.Controls.Add(this.cmbDifficulty);
@@ -88,26 +94,37 @@
             this.tabGeneralSettings.Text = "General";
             this.tabGeneralSettings.UseVisualStyleBackColor = true;
             // 
+            // btnClearScores
+            // 
+            this.btnClearScores.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnClearScores.Location = new System.Drawing.Point(9, 185);
+            this.btnClearScores.Name = "btnClearScores";
+            this.btnClearScores.Size = new System.Drawing.Size(313, 23);
+            this.btnClearScores.TabIndex = 4;
+            this.btnClearScores.Text = "Clear High Scores";
+            this.btnClearScores.UseVisualStyleBackColor = true;
+            // 
             // label3
             // 
             this.label3.AutoSize = true;
             this.label3.Location = new System.Drawing.Point(6, 78);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(42, 13);
+            this.label3.Size = new System.Drawing.Size(69, 13);
             this.label3.TabIndex = 5;
-            this.label3.Text = "Volume";
+            this.label3.Text = "BGM Volume";
             // 
-            // tbVolume
+            // tbBGMVolume
             // 
-            this.tbVolume.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.tbVolume.BackColor = System.Drawing.SystemColors.ControlLightLight;
-            this.tbVolume.Location = new System.Drawing.Point(176, 78);
-            this.tbVolume.Maximum = 100;
-            this.tbVolume.Name = "tbVolume";
-            this.tbVolume.Size = new System.Drawing.Size(146, 45);
-            this.tbVolume.TabIndex = 4;
-            this.tbVolume.TickFrequency = 10;
-            this.tbVolume.Value = 50;
+            this.tbBGMVolume.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.tbBGMVolume.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.tbBGMVolume.Location = new System.Drawing.Point(176, 78);
+            this.tbBGMVolume.Maximum = 100;
+            this.tbBGMVolume.Name = "tbBGMVolume";
+            this.tbBGMVolume.Size = new System.Drawing.Size(146, 45);
+            this.tbBGMVolume.TabIndex = 4;
+            this.tbBGMVolume.TickFrequency = 10;
+            this.tbBGMVolume.Value = 50;
             // 
             // txtPlayerName
             // 
@@ -169,17 +186,6 @@
             this.tabAbout.Text = "About";
             this.tabAbout.UseVisualStyleBackColor = true;
             // 
-            // btnClearScores
-            // 
-            this.btnClearScores.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnClearScores.Location = new System.Drawing.Point(9, 185);
-            this.btnClearScores.Name = "btnClearScores";
-            this.btnClearScores.Size = new System.Drawing.Size(313, 23);
-            this.btnClearScores.TabIndex = 4;
-            this.btnClearScores.Text = "Clear High Scores";
-            this.btnClearScores.UseVisualStyleBackColor = true;
-            // 
             // textBox1
             // 
             this.textBox1.BackColor = System.Drawing.SystemColors.ControlLightLight;
@@ -194,6 +200,37 @@
             this.textBox1.TabIndex = 0;
             this.textBox1.Text = resources.GetString("textBox1.Text");
             // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(6, 116);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(65, 13);
+            this.label4.TabIndex = 7;
+            this.label4.Text = "SFX Volume";
+            // 
+            // tbSFXVolume
+            // 
+            this.tbSFXVolume.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.tbSFXVolume.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.tbSFXVolume.Location = new System.Drawing.Point(176, 116);
+            this.tbSFXVolume.Maximum = 100;
+            this.tbSFXVolume.Name = "tbSFXVolume";
+            this.tbSFXVolume.Size = new System.Drawing.Size(146, 45);
+            this.tbSFXVolume.TabIndex = 6;
+            this.tbSFXVolume.TickFrequency = 10;
+            this.tbSFXVolume.Value = 50;
+            // 
+            // lnkLoadDefaults
+            // 
+            this.lnkLoadDefaults.AutoSize = true;
+            this.lnkLoadDefaults.Location = new System.Drawing.Point(9, 263);
+            this.lnkLoadDefaults.Name = "lnkLoadDefaults";
+            this.lnkLoadDefaults.Size = new System.Drawing.Size(46, 13);
+            this.lnkLoadDefaults.TabIndex = 4;
+            this.lnkLoadDefaults.TabStop = true;
+            this.lnkLoadDefaults.Text = "Defaults";
+            // 
             // Settings
             // 
             this.AcceptButton = this.btnSave;
@@ -201,6 +238,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnCancel;
             this.ClientSize = new System.Drawing.Size(360, 293);
+            this.Controls.Add(this.lnkLoadDefaults);
             this.Controls.Add(this.tabControl);
             this.Controls.Add(this.btnSave);
             this.Controls.Add(this.btnCancel);
@@ -211,10 +249,11 @@
             this.Text = "Settings";
             this.tabGeneralSettings.ResumeLayout(false);
             this.tabGeneralSettings.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.tbVolume)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.tbBGMVolume)).EndInit();
             this.tabControl.ResumeLayout(false);
             this.tabAbout.ResumeLayout(false);
             this.tabAbout.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.tbSFXVolume)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -231,9 +270,12 @@
         private System.Windows.Forms.TextBox txtPlayerName;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.TrackBar tbVolume;
+        private System.Windows.Forms.TrackBar tbBGMVolume;
         private System.Windows.Forms.Button btnClearScores;
         private System.Windows.Forms.TabPage tabAbout;
         private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.TrackBar tbSFXVolume;
+        private System.Windows.Forms.LinkLabel lnkLoadDefaults;
     }
 }

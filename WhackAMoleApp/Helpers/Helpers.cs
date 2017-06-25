@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -69,14 +71,11 @@ namespace WhackAMoleApp
 
     public static class NumberHelper
     {
-
         public static double PercOf(this double val, double maxVal = 100)
         {
             if (val > maxVal) return 1;
             if (val < 0) return 0;
             return (val / maxVal); // Will return a number between 0 and 1
         }
-
     }
-
 }

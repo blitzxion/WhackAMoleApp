@@ -19,7 +19,11 @@ namespace WhackAMoleApp
         public string PlayerName { get; set; } = "Mole Whacker";
 
         [DefaultValue(50f)]
-        public float Volume { get; set; } = 50f;
+        public float BGMVolume { get; set; } = 50f;
+
+        [DefaultValue(50f)]
+        public float SFXVolume { get; set; } = 50f;
+
     }
 
     public abstract class BaseAppSettings<T> where T : new()

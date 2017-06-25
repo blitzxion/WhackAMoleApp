@@ -106,7 +106,6 @@
   <ItemGroup>
     <Compile Include="Classes\AppSettings.cs" />
     <Compile Include="Classes\Difficulty.cs" />
-    <Compile Include="Classes\LoopStream.cs" />
     <Compile Include="Classes\MoleControl.cs" />
     <Compile Include="Classes\SoundPlayer.cs" />
     <Compile Include="Enums\GameDifficultyTypes.cs" />

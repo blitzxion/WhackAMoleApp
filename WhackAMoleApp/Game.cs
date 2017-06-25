@@ -27,7 +27,6 @@ namespace WhackAMoleApp
         int _totalMolesHit { get; set; } = 0;
         int _totalMolesMissed { get; set; } = 0;
 
-        //List<WaveSound> _sounds { get; set; } = new List<WaveSound>();
         IEnumerable<Stream> _sounds { get; set; } = new List<Stream>();
 
         double TotalPoints
@@ -149,21 +148,8 @@ namespace WhackAMoleApp
 
         void HitSound()
         {
-            // _sounds[_gameRNG.Next(_sounds.Count)].Play();
-
-            var newSound = new MemoryStream();
-            var selectedSound = _sounds.ElementAt(_gameRNG.Next(_sounds.Count()));
-
-            // Copy the sound to the selected sound
-            selectedSound.CopyTo(newSound);
-
-            // Must reset this, otherwise, reuse of the sound causes no playback to happen.
-            newSound.Position = 0;
-            selectedSound.Position = 0;
-
-            var wave = new WaveSound(newSound) { Volume = _settings.Volume / 100 };
-            wave.OnPlaybackStopped += () => { wave.Dispose(); };
-            wave.Play();
+            var rndSound = _sounds.ElementAt(_gameRNG.Next(_sounds.Count()));
+            MusicManager.GetSound(rndSound).Play();
         }
 
         void GameOver()

@@ -12,20 +12,34 @@ namespace WhackAMoleApp
         static Mp3Sound _gameMusic { get; set; }
         static Mp3Sound _menuMusic { get; set; }
 
-        static float _volume { get; set; }
-        public static float Volume
+        static float _bgmVolume { get; set; }
+        public static float BGMVolume
         {
             get
             {
-                return _volume;
+                return _bgmVolume;
             }
             set
             {
-                _volume = value;
+                _bgmVolume = value;
+                MenuMusic.Volume = _bgmVolume;
+                GameMusic.Volume = _bgmVolume;
+            }
+        }
 
-                MenuMusic.Volume = _volume;
-                GameMusic.Volume = _volume;
+        static float? _sfxVolume { get; set; }
+        public static float SFXVolume
+        {
+            get
+            {
+                if (!_sfxVolume.HasValue)
+                    _sfxVolume = AppSettings.Load().SFXVolume / 100f;
 
+                return _sfxVolume.Value;
+            }
+            set
+            {
+                _sfxVolume = value;
             }
         }
 
@@ -36,7 +50,7 @@ namespace WhackAMoleApp
                     _menuMusic = new Mp3Sound(new MemoryStream(Properties.Resources.menu))
                     {
                         EnableLoop = true,
-                        Volume = (AppSettings.Load().Volume / 100)
+                        Volume = (AppSettings.Load().BGMVolume / 100)
                     };
                 }
 
@@ -53,12 +67,31 @@ namespace WhackAMoleApp
                     _gameMusic = new Mp3Sound(new MemoryStream(Properties.Resources.gameplay))
                     {
                         EnableLoop = true,
-                        Volume = (AppSettings.Load().Volume / 100)
+                        Volume = (AppSettings.Load().BGMVolume / 100)
                     };
                 }
 
                 return _gameMusic;
             }
+        }
+
+
+        public static WaveSound GetSound(Stream sound)
+        {
+            var newSound = new MemoryStream();
+            var selectedSound = sound;
+
+            // Copy the sound to the selected sound
+            selectedSound.CopyTo(newSound);
+
+            // Must reset this, otherwise, reuse of the sound causes no playback to happen.
+            newSound.Position = 0;
+            selectedSound.Position = 0;
+
+            var wave = new WaveSound(newSound) { Volume = SFXVolume };
+            wave.OnPlaybackStopped += () => { wave.Dispose(); };
+
+            return wave;
         }
 
     }
