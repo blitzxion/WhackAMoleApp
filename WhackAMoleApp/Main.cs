@@ -15,9 +15,9 @@ namespace WhackAMoleApp
 {
     public partial class Main : Form
     {
-        FormSingleton<Game> _gameForm { get; set; } = new FormSingleton<Game>();
-
-        Mp3Sound _menuMusic { get; set; }
+        FormSingleton<Game> _gameForm = new FormSingleton<Game>();
+        HighScores _frmHighScores = new HighScores();
+        Settings _formSettings = new Settings();
 
         public Main()
         {
@@ -28,50 +28,44 @@ namespace WhackAMoleApp
 
         public void SetupControls()
         {
-            lnkAbout.Click += (e, v) => {
-                Process.Start("http://richardshaw.us");
-            };
+            lnkAbout.Click += (e, v) => Process.Start("http://richardshaw.us");
 
-            btnNewGame.Click += (e,v) => {
-
-                _menuMusic.Stop();
-
+            btnNewGame.Click += (e, v) =>
+            {
+                MusicManager.MenuMusic.Stop();
                 Hide();
                 var form = _gameForm.GetForm;
                 form.Closed += (s, args) => Show();
                 form.Show();
             };
 
+
             btnScores.Click += (e, v) =>
             {
-                var form = new HighScores();
-                form.ShowDialog();
-                form.Focus();
-            };
-
-            btnSettings.Click += (e, v) => {
-                var form = new Settings();
-
-                form.OnSettingsChanged += control => {
-                    if(control.GetType() == typeof(TrackBar))
-                    {
-                        TrackBar volCtr = control as TrackBar;
-                        _menuMusic.Volume = volCtr.Value / 100;
-                    }
-                };
-
-                form.ShowDialog();
-                form.Focus();
+                _frmHighScores.ShowDialog();
+                _frmHighScores.Focus();
             };
 
 
-            _menuMusic = new Mp3Sound(new MemoryStream(Properties.Resources.menu)) {
-                EnableLoop = true,
-                Volume = (AppSettings.Load().Volume / 100)
+            btnSettings.Click += (e, v) =>
+            {
+                _formSettings.ShowDialog();
+                _formSettings.Focus();
             };
 
-            Activated += (o, e) => _menuMusic.Play();
-            FormClosing += (o, e) => _menuMusic.Stop();
+            // When the settings form makes a change, lets do something about it.
+            _formSettings.OnSettingsChanged += control =>
+            {
+                if (control.GetType() == typeof(TrackBar))
+                {
+                    TrackBar volCtr = control as TrackBar;
+                    MusicManager.Volume = volCtr.Value / 100f;
+                }
+            };
+
+            // Do stuff with the music based off the status of our form
+            Activated += (o, e) => MusicManager.MenuMusic.Play();
+            FormClosing += (o, e) => MusicManager.MenuMusic.Stop();
         }
 
     }

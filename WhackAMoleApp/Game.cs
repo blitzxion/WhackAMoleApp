@@ -30,8 +30,6 @@ namespace WhackAMoleApp
         //List<WaveSound> _sounds { get; set; } = new List<WaveSound>();
         IEnumerable<Stream> _sounds { get; set; } = new List<Stream>();
 
-        Mp3Sound _gameMusic { get; set; }
-
         double TotalPoints
         {
             get
@@ -80,16 +78,9 @@ namespace WhackAMoleApp
 
                 _molesControls.Add(mole);
             });
-
-            _gameMusic = new Mp3Sound(new MemoryStream(Properties.Resources.gameplay))
-            {
-                EnableLoop = true,
-                Volume = _settings.Volume / 100
-            };
-
-            Activated += (o, e) => _gameMusic.Play();
-            FormClosing += (o, e) => _gameMusic.Stop();
-
+            
+            Activated += (o, e) => MusicManager.GameMusic.Play();
+            FormClosing += (o, e) => MusicManager.GameMusic.Stop();
         }
 
         void Reset()
@@ -102,35 +93,39 @@ namespace WhackAMoleApp
             _totalMolesHit = 0;
             _totalMolesMissed = 0;
             _totalMolesSeen = 0;
+
+            _gameTimer.Tick -= GameWorker;
+
         }
 
         void Start()
         {
-            _gameTimer.Tick += (obj, args) =>
-            {
-
-                TimeSpan remainingTime = _gameEndTime - DateTime.UtcNow;
-
-                lblTime.Text = remainingTime.ToString("mm\\:ss");
-
-                if (remainingTime < TimeSpan.Zero)
-                {
-                    GameOver();
-                    return;
-                }
-
-                // This will control the actions of the mole, by chance
-                _molesControls.ForEach(x =>
-                {
-                    x.DoWork(_gameRNG);
-                });
-            };
+            _gameTimer.Tick += GameWorker;
 
             // Setup when we started and how long should we play for
             _gameStarted = DateTime.UtcNow;
             _gameEndTime = _gameStarted.Add(_difficulty.GameDuration);
 
             _gameTimer.Start();
+        }
+
+        void GameWorker(Object obj, EventArgs args)
+        {
+            TimeSpan remainingTime = _gameEndTime - DateTime.UtcNow;
+
+            lblTime.Text = remainingTime.ToString("mm\\:ss");
+
+            if (remainingTime < TimeSpan.Zero)
+            {
+                GameOver();
+                return;
+            }
+
+            // This will control the actions of the mole, by chance
+            _molesControls.ForEach(x =>
+            {
+                x.DoWork(_gameRNG);
+            });
         }
 
         void UpdateTotals()
@@ -143,16 +138,6 @@ namespace WhackAMoleApp
 
         void LoadSounds()
         {
-            //Func<Stream, WaveSound> setupSound = str => {
-            //    return new WaveSound(str) { Volume = _settings.Volume / 100 };
-            //};
-
-            //_sounds.Add(setupSound(Properties.Resources.Yipe));
-            //_sounds.Add(setupSound(Properties.Resources.Yipe2));
-            //_sounds.Add(setupSound(Properties.Resources.Yipe3));
-            //_sounds.Add(setupSound(Properties.Resources.Ugh));
-            //_sounds.Add(setupSound(Properties.Resources.Ugh2));
-
             _sounds = new List<Stream>() {
                 Properties.Resources.Yipe,
                 Properties.Resources.Yipe2,
@@ -207,6 +192,44 @@ namespace WhackAMoleApp
             }
 
             Close();
+        }
+
+        void Pause()
+        {
+            _gameTimer.Stop();
+
+            PauseMenu _pauseMenu = new PauseMenu();
+            _pauseMenu.FormClosing += (o, evt) => {
+
+                if (_pauseMenu.WillQuit)
+                {
+                    GameOver();
+                    return;
+                }
+
+                if (_pauseMenu.WillRestart)
+                {
+                    Reset();
+                    Start();
+                    return;
+                }
+
+                _gameTimer.Start();
+            };
+
+            _pauseMenu.ShowDialog();
+            _pauseMenu.Focus();
+
+        }
+
+        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+        {
+            if (keyData == Keys.Escape)
+            {
+                Pause();
+                return true;
+            }
+            return base.ProcessCmdKey(ref msg, keyData);
         }
 
     }
