@@ -24,8 +24,7 @@ namespace WhackAMoleApp
         {
             using (var context = new HighScoreContext())
             {
-                // Top 10 for now
-                var scores = context.HighScores.OrderByDescending(x => x.Id).Take(10).ToList();
+                var scores = context.HighScores.OrderByDescending(x => x.Id).ToList();
                 scores.ForEach(score => {
                     dataGrid.Rows.Add(score.Entered.ToShortDateString(), score.Name, score.Difficulty, score.TotalMoles, score.TotalHit, score.TotalMissed, score.Score);
                 });

@@ -157,7 +157,7 @@ namespace WhackAMoleApp
             // Copy the sound to the selected sound
             selectedSound.CopyTo(newSound);
 
-            // Must reset this, otherwise, crap happens.
+            // Must reset this, otherwise, reuse of the sound causes no playback to happen.
             newSound.Position = 0;
             selectedSound.Position = 0;
 

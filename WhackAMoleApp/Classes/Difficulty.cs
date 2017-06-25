@@ -21,15 +21,6 @@ namespace WhackAMoleApp
 
     public class Difficulty : IDifficulty
     {
-        //public GameDifficultyTypes Type => GameDifficultyTypes.NORMAL;
-        //public TimeSpan GameDuration => TimeSpan.FromMinutes(2);
-        //public double ShowChance => 10.PercOf();
-        //public TimeSpan ShowDuration => TimeSpan.FromSeconds(3);
-        //public TimeSpan HitDuration => TimeSpan.FromSeconds(1);
-        //public TimeSpan MissDuration => TimeSpan.FromSeconds(1);
-        //public double PointsPerHit => 10;
-        //public double PointsLossPerMiss => 5;
-
         public GameDifficultyTypes GameDifficulty { get; private set; }
         public TimeSpan GameDuration { get; private set; }
         public TimeSpan GameTickInterval { get; private set; }

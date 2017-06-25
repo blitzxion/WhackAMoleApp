@@ -23,8 +23,8 @@ namespace WhackAMoleApp
             {
                 _volume = value;
 
-                _gameMusic.Volume = _volume;
-                _menuMusic.Volume = _volume;
+                MenuMusic.Volume = _volume;
+                GameMusic.Volume = _volume;
 
             }
         }

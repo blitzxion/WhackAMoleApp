@@ -12,8 +12,6 @@ namespace WhackAMoleApp
 {
     public partial class PauseMenu : Form
     {
-        Settings _formSettings = new Settings();
-
         public bool WillQuit { get; set; } = false;
         public bool WillRestart { get; set; } = false;
 
@@ -27,20 +25,9 @@ namespace WhackAMoleApp
         void SetupControls()
         {
 
-            btnSettings.Click += (o, e) => {
+            btnSettings.Click += (o, e) => (new Settings()).ShowDialog();
 
-                _formSettings.OnSettingsChanged += control =>
-                {
-                    if (control.GetType() == typeof(TrackBar))
-                    {
-                        TrackBar volCtr = control as TrackBar;
-                        MusicManager.Volume = volCtr.Value / 100f;
-                    }
-                };
-
-                _formSettings.ShowDialog();
-
-            };
+            btnRestart.Click += (o, e) => Close();
 
             btnRestart.Click += (o, e) => {
                 WillRestart = true;

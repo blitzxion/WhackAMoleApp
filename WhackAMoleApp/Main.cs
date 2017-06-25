@@ -16,9 +16,7 @@ namespace WhackAMoleApp
     public partial class Main : Form
     {
         FormSingleton<Game> _gameForm = new FormSingleton<Game>();
-        HighScores _frmHighScores = new HighScores();
-        Settings _formSettings = new Settings();
-
+        
         public Main()
         {
             InitializeComponent();
@@ -30,6 +28,10 @@ namespace WhackAMoleApp
         {
             lnkAbout.Click += (e, v) => Process.Start("http://richardshaw.us");
 
+            btnScores.Click += (e, v) => (new HighScores()).ShowDialog();
+
+            btnSettings.Click += (e, v) => (new Settings()).ShowDialog();
+
             btnNewGame.Click += (e, v) =>
             {
                 MusicManager.MenuMusic.Stop();
@@ -39,29 +41,7 @@ namespace WhackAMoleApp
                 form.Show();
             };
 
-
-            btnScores.Click += (e, v) =>
-            {
-                _frmHighScores.ShowDialog();
-                _frmHighScores.Focus();
-            };
-
-
-            btnSettings.Click += (e, v) =>
-            {
-                _formSettings.ShowDialog();
-                _formSettings.Focus();
-            };
-
-            // When the settings form makes a change, lets do something about it.
-            _formSettings.OnSettingsChanged += control =>
-            {
-                if (control.GetType() == typeof(TrackBar))
-                {
-                    TrackBar volCtr = control as TrackBar;
-                    MusicManager.Volume = volCtr.Value / 100f;
-                }
-            };
+            
 
             // Do stuff with the music based off the status of our form
             Activated += (o, e) => MusicManager.MenuMusic.Play();

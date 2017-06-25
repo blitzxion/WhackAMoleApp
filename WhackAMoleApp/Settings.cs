@@ -41,14 +41,17 @@ namespace WhackAMoleApp
                 Close();
             };
 
-            btnCancel.Click += (o, args) => 
-            {
-                Close();
-            };
+            btnCancel.Click += (o, args) => Close();
 
             cmbDifficulty.SelectedValueChanged += (o, e) => { OnSettingsChanged?.Invoke(cmbDifficulty); };
+
             txtPlayerName.TextChanged += (o, e) => OnSettingsChanged?.Invoke(txtPlayerName);
-            tbVolume.ValueChanged += (o, e) => OnSettingsChanged?.Invoke(tbVolume);
+
+            tbVolume.ValueChanged += (o, e) =>
+            {
+                OnSettingsChanged?.Invoke(tbVolume);
+                MusicManager.Volume = tbVolume.Value / 100f;
+            };
         }
 
         void ClearHighScores()
