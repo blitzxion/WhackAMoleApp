@@ -91,6 +91,7 @@ namespace WhackAMoleApp
 
             Activated += (o, e) => StartUp();
             FormClosing += (o, e) => Shutdown();
+            Deactivate += (o, e) => Pause();
         }
 
         void Reset()
@@ -245,6 +246,8 @@ namespace WhackAMoleApp
 
         void Shutdown()
         {
+            IsClosing = true;
+
             MusicManager.GameMusic.Stop();
 
             _gameTimer.Stop();

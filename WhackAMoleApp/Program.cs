@@ -14,6 +14,8 @@ namespace WhackAMoleApp
         [STAThread]
         static void Main()
         {
+            Application.ApplicationExit += (o, e) => MusicManager.Shutdown();
+
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new Main());
