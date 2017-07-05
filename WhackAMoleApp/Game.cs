@@ -12,7 +12,7 @@ using System.Windows.Forms;
 
 namespace WhackAMoleApp
 {
-    public partial class Game : Form
+    public partial class Game : BaseForm
     {
 
         bool IsClosing { get; set; } = false;
@@ -48,9 +48,9 @@ namespace WhackAMoleApp
         public Game()
         {
             InitializeComponent();
+            SetupControls();
             CenterToScreen();
 
-            SetupControls();
             Reset();
             Start();
         }

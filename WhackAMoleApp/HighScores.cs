@@ -10,14 +10,13 @@ using System.Windows.Forms;
 
 namespace WhackAMoleApp
 {
-    public partial class HighScores : Form
+    public partial class HighScores : BaseForm
     {
         public HighScores()
         {
             InitializeComponent();
-            CenterToScreen();
-
             SetupControls();
+            CenterToScreen();
         }
 
         void SetupControls()

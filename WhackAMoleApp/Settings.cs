@@ -11,7 +11,7 @@ using System.Windows.Forms;
 
 namespace WhackAMoleApp
 {
-    public partial class Settings : Form
+    public partial class Settings : BaseForm
     {
         public event Action<Control> OnSettingsChanged;
         public event Action<AppSettings> OnSettingsSaved;
@@ -23,9 +23,9 @@ namespace WhackAMoleApp
         public Settings()
         {
             InitializeComponent();
-            CenterToParent();
-
             SetupControls();
+            CenterToScreen();
+
             LoadFromSettings(AppSettings.Load());
         }
 

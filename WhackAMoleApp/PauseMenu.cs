@@ -10,7 +10,7 @@ using System.Windows.Forms;
 
 namespace WhackAMoleApp
 {
-    public partial class PauseMenu : Form
+    public partial class PauseMenu : BaseForm
     {
         public bool WillQuit { get; private set; } = false;
         public bool WillRestart { get; private set; } = false;
@@ -18,8 +18,8 @@ namespace WhackAMoleApp
         public PauseMenu()
         {
             InitializeComponent();
-            CenterToScreen();
             SetupControls();
+            CenterToScreen();
         }
 
         void SetupControls()

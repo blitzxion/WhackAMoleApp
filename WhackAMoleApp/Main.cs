@@ -13,7 +13,7 @@ using System.IO;
 
 namespace WhackAMoleApp
 {
-    public partial class Main : Form
+    public partial class Main : BaseForm
     {        
         public Main()
         {
