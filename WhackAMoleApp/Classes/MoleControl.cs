@@ -21,6 +21,11 @@ namespace WhackAMoleApp
         public double DurationHit { get; set; } = 1;
         public double DurationMissed { get; set; } = 1;
 
+        double _durationShowing { get; set; } = 0;
+        double _durationHitting { get; set; } = 0;
+        double _durationMissing { get; set; } = 0;
+
+
         public event Action OnHit;
         public event Action OnMiss;
         public event Action OnShow;
@@ -71,7 +76,7 @@ namespace WhackAMoleApp
                     break;
                 case MoleStates.Shown:
 
-                    if ((DateTime.Now - InStateSince).TotalSeconds < DurationShow)
+                    if (_durationShowing++ < DurationShow)
                         return;
 
                     ChangeMoleState(MoleStates.Missed);
@@ -79,7 +84,7 @@ namespace WhackAMoleApp
                     break;
                 case MoleStates.Hit:
 
-                    if ((DateTime.Now - InStateSince).TotalSeconds < DurationHit)
+                    if (_durationHitting++ < DurationHit)
                         return;
 
                     ChangeMoleState(MoleStates.Hiding);
@@ -87,7 +92,7 @@ namespace WhackAMoleApp
                     break;
                 case MoleStates.Missed:
 
-                    if ((DateTime.Now - InStateSince).TotalSeconds < DurationMissed)
+                    if (_durationMissing++ < DurationMissed)
                         return;
 
                     ChangeMoleState(MoleStates.Hiding);
@@ -133,8 +138,15 @@ namespace WhackAMoleApp
                     break;
             }
 
-            InStateSince = DateTime.Now;
+            ResetDurations();
+            
+        }
 
+        void ResetDurations()
+        {
+            _durationMissing = 0;
+            _durationHitting = 0;
+            _durationShowing = 0;
         }
 
         void SetImage(Image image)

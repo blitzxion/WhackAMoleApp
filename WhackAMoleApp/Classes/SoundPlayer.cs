@@ -43,7 +43,7 @@ namespace WhackAMoleApp
             _outDevice = new WasapiOut();
             _outDevice.PlaybackStopped += (o, e) => {
                 OnPlaybackStopped?.Invoke();
-                if (EnableLoop) Play();
+                if (EnableLoop) Play(EnableLoop);
             };
         }
 
@@ -55,8 +55,10 @@ namespace WhackAMoleApp
             }
         }
 
-        public virtual void Play()
+        public virtual void Play(bool loop = false)
         {
+            EnableLoop = loop;
+
             if (_soundReader != null && _outDevice != null)
             {
                 // Only place it back to the start if we're in a stopped state.
@@ -123,7 +125,7 @@ namespace WhackAMoleApp
             _outDevice.Init(_soundReader);
 
             _outDevice.PlaybackStopped += (o, e) => {
-                if (EnableLoop) Play();
+                if (EnableLoop) Play(EnableLoop);
             };
         }
     }
@@ -137,7 +139,7 @@ namespace WhackAMoleApp
             
             _outDevice.Init(_soundReader);
 
-            _outDevice.PlaybackStopped += (o, e) => { if (EnableLoop) Play(); };
+            _outDevice.PlaybackStopped += (o, e) => { if (EnableLoop) Play(EnableLoop); };
         }
     }
 

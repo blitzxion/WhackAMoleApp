@@ -14,15 +14,20 @@ namespace WhackAMoleApp
 {
     public partial class Game : Form
     {
+
+        bool IsClosing { get; set; } = false;
+        bool IsPausing { get; set; } = false;
+        bool IsGameOver { get; set; } = false;
+
         Random _gameRNG { get; set; } = new Random();
 
         AppSettings _settings => AppSettings.Load();
         IDifficulty _difficulty => Difficulty.FromType(_settings.Difficulty);
         List<MoleControl> _molesControls { get; set; } = new List<MoleControl>();
         Timer _gameTimer { get; set; }
+        Timer _actionTimer { get; set; }
 
-        DateTime _gameStarted { get; set; } = DateTime.MinValue;
-        DateTime _gameEndTime { get; set; } = DateTime.MinValue;
+        int _secondsSpentInGame { get; set; }
         int _totalMolesSeen { get; set; } = 0;
         int _totalMolesHit { get; set; } = 0;
         int _totalMolesMissed { get; set; } = 0;
@@ -54,8 +59,14 @@ namespace WhackAMoleApp
         {
             LoadSounds();
 
-            // Create the timer
+            // Create the game timer
             _gameTimer = new Timer()
+            {
+                Interval = (int)TimeSpan.FromSeconds(1).TotalMilliseconds
+            };
+
+            // Create the action timer
+            _actionTimer = new Timer()
             {
                 Interval = (int)_difficulty.GameTickInterval.TotalMilliseconds,
             };
@@ -77,49 +88,55 @@ namespace WhackAMoleApp
 
                 _molesControls.Add(mole);
             });
-            
-            Activated += (o, e) => MusicManager.GameMusic.Play();
-            FormClosing += (o, e) => MusicManager.GameMusic.Stop();
+
+            Activated += (o, e) => StartUp();
+            FormClosing += (o, e) => Shutdown();
         }
 
         void Reset()
         {
             _molesControls.ForEach(x => x.Reset());
 
-            _gameStarted = DateTime.MinValue;
-            _gameEndTime = DateTime.MinValue;
+            _secondsSpentInGame = 0;
 
             _totalMolesHit = 0;
             _totalMolesMissed = 0;
             _totalMolesSeen = 0;
 
-            _gameTimer.Tick -= GameWorker;
+            _gameTimer.Tick -= GameTimerWorker;
+            _actionTimer.Tick -= ActionTimerWorker;
 
         }
 
         void Start()
         {
-            _gameTimer.Tick += GameWorker;
+            _gameTimer.Tick += GameTimerWorker;
+            _actionTimer.Tick += ActionTimerWorker;
 
-            // Setup when we started and how long should we play for
-            _gameStarted = DateTime.UtcNow;
-            _gameEndTime = _gameStarted.Add(_difficulty.GameDuration);
+            _secondsSpentInGame = 0;
 
             _gameTimer.Start();
+            _actionTimer.Start();
         }
 
-        void GameWorker(Object obj, EventArgs args)
+        void GameTimerWorker(Object obj, EventArgs args)
         {
-            TimeSpan remainingTime = _gameEndTime - DateTime.UtcNow;
+            _secondsSpentInGame++;
+
+            TimeSpan remainingTime = _difficulty.GameDuration.Subtract(TimeSpan.FromSeconds(_secondsSpentInGame));
 
             lblTime.Text = remainingTime.ToString("mm\\:ss");
 
-            if (remainingTime < TimeSpan.Zero)
+            if (remainingTime <= TimeSpan.Zero)
             {
                 GameOver();
                 return;
             }
 
+        }
+
+        void ActionTimerWorker(Object obj, EventArgs args)
+        {
             // This will control the actions of the mole, by chance
             _molesControls.ForEach(x =>
             {
@@ -154,7 +171,11 @@ namespace WhackAMoleApp
 
         void GameOver()
         {
+            IsGameOver = true;
+
             _gameTimer.Stop();
+            _actionTimer.Stop();
+
             var scoreAsk = MessageBox.Show("Game over! Would you like to submit your score?", "Game Over!", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button1);
             if (scoreAsk == DialogResult.Yes)
             {
@@ -182,29 +203,58 @@ namespace WhackAMoleApp
 
         void Pause()
         {
+            if (IsPausing || IsClosing || IsGameOver)
+                return;
+
+            IsPausing = true;
+
             _gameTimer.Stop();
+            _actionTimer.Stop();
 
-            PauseMenu _pauseMenu = new PauseMenu();
-            _pauseMenu.FormClosing += (o, evt) => {
+            var pauseMenu = new PauseMenu();
+            pauseMenu.FormClosing += (o, evt) =>
+            {
 
-                if (_pauseMenu.WillQuit)
+                if (pauseMenu.WillQuit)
                 {
                     GameOver();
                     return;
                 }
 
-                if (_pauseMenu.WillRestart)
+                if (pauseMenu.WillRestart)
                 {
                     Reset();
                     Start();
                     return;
                 }
 
+                IsPausing = false;
+
                 _gameTimer.Start();
+                _actionTimer.Start();
             };
 
-            _pauseMenu.ShowDialog();
-            _pauseMenu.Focus();
+            pauseMenu.ShowDialog();
+
+        }
+
+        void StartUp()
+        {
+            MusicManager.GameMusic.Play(true);
+        }
+
+        void Shutdown()
+        {
+            MusicManager.GameMusic.Stop();
+
+            _gameTimer.Stop();
+            _actionTimer.Stop();
+
+            _gameTimer.Dispose();
+            _actionTimer.Dispose();
+
+            _gameTimer = null;
+            _actionTimer = null;
 
         }
 
@@ -218,6 +268,7 @@ namespace WhackAMoleApp
             return base.ProcessCmdKey(ref msg, keyData);
         }
 
+        
     }
 
 }

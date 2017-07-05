@@ -13,7 +13,7 @@ namespace WhackAMoleApp
         where TForm : Form, new()
     {
         private TForm instance;
-        public TForm GetForm
+        public TForm Form
         {
             get
             {
@@ -22,7 +22,7 @@ namespace WhackAMoleApp
 
                 return instance;
             }
-        }
+        }    
     }
 
     public static class EnumerableHelper

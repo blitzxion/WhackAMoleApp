@@ -14,9 +14,7 @@ using System.IO;
 namespace WhackAMoleApp
 {
     public partial class Main : Form
-    {
-        FormSingleton<Game> _gameForm = new FormSingleton<Game>();
-        
+    {        
         public Main()
         {
             InitializeComponent();
@@ -36,15 +34,19 @@ namespace WhackAMoleApp
             {
                 MusicManager.MenuMusic.Stop();
                 Hide();
-                var form = _gameForm.GetForm;
-                form.Closed += (s, args) => Show();
-                form.Show();
+
+                var gameForm = new Game();
+
+                gameForm.Closed += (s, args) => Show();
+                gameForm.ShowDialog();
+
+                gameForm = null;
             };
 
             
 
             // Do stuff with the music based off the status of our form
-            Activated += (o, e) => MusicManager.MenuMusic.Play();
+            Activated += (o, e) => MusicManager.MenuMusic.Play(true);
             FormClosing += (o, e) => MusicManager.MenuMusic.Stop();
         }
 

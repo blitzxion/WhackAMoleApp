@@ -12,8 +12,8 @@ namespace WhackAMoleApp
 {
     public partial class PauseMenu : Form
     {
-        public bool WillQuit { get; set; } = false;
-        public bool WillRestart { get; set; } = false;
+        public bool WillQuit { get; private set; } = false;
+        public bool WillRestart { get; private set; } = false;
 
         public PauseMenu()
         {
@@ -38,7 +38,6 @@ namespace WhackAMoleApp
                 WillQuit = true;
                 Close();
             };
-
         }
 
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
@@ -50,7 +49,6 @@ namespace WhackAMoleApp
             }
             return base.ProcessCmdKey(ref msg, keyData);
         }
-
 
     }
 }
